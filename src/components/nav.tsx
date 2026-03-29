@@ -33,11 +33,11 @@ function pickRandomImages(count: number) {
 const menuVariants = {
   closed: {
     clipPath: "circle(0% at calc(100% - 40px) 32px)",
-    transition: { duration: 0.5, ease: [0.65, 0, 0.35, 1] },
+    transition: { duration: 0.5, ease: [0.65, 0, 0.35, 1] as const },
   },
   open: {
     clipPath: "circle(150% at calc(100% - 40px) 32px)",
-    transition: { duration: 0.7, ease: [0.65, 0, 0.35, 1] },
+    transition: { duration: 0.7, ease: [0.65, 0, 0.35, 1] as const },
   },
 };
 
@@ -46,7 +46,7 @@ const linkVariants = {
   open: (i: number) => ({
     opacity: 1,
     x: 0,
-    transition: { delay: 0.3 + i * 0.07, duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { delay: 0.3 + i * 0.07, duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
@@ -56,7 +56,7 @@ const imageVariants = {
     opacity: 1,
     y: 0,
     rotate: i === 0 ? -4 : i === 1 ? 2 : -2,
-    transition: { delay: 0.5 + i * 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+    transition: { delay: 0.5 + i * 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] as const },
   }),
 };
 
@@ -109,7 +109,7 @@ export function Nav() {
             <div className="flex flex-col items-end gap-[5px]">
               <motion.span
                 animate={{ rotate: open ? 45 : 0, y: open ? 7 : 0, width: 24 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] as const }}
                 className="block h-[2px] rounded-full origin-center"
                 style={{ backgroundColor: open ? "#fff" : "#18181b" }}
               />
@@ -121,7 +121,7 @@ export function Nav() {
               />
               <motion.span
                 animate={{ rotate: open ? -45 : 0, y: open ? -7 : 0, width: open ? 24 : 20 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] as const }}
                 className="block h-[2px] rounded-full origin-center"
                 style={{ backgroundColor: open ? "#fff" : "#71717a" }}
               />

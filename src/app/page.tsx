@@ -96,34 +96,37 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-6 items-center">
             {/* Angled portrait with shadow */}
-            <FadeIn>
-              <div className="relative md:ml-auto md:mr-8 md:max-w-sm">
-                <div
-                  className="rounded-lg bg-white p-[6px]"
-                  style={{
-                    rotate: "-3deg",
-                    boxShadow:
-                      "0 30px 60px -10px rgba(0,0,0,0.18), 0 18px 36px -6px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04)",
-                  }}
-                >
-                  <Image
-                    src={siteContent.about.portrait}
-                    alt="Lisa Hancock"
-                    width={500}
-                    height={625}
-                    className="rounded-md w-full h-auto"
-                    sizes="(max-width: 768px) 80vw, 350px"
-                  />
-                </div>
-                <div
-                  className="absolute -bottom-4 right-[-20px] bg-white px-4 py-2 rounded-sm"
-                  style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
-                >
-                  <p className="text-xs tracking-[0.2em] uppercase text-zinc-400">Est. 2006</p>
-                  <p className="text-xs text-zinc-300">Brooklyn, NY</p>
-                </div>
+            <motion.div
+              initial={{ opacity: 0, y: 60, rotate: 5, x: -30 }}
+              whileInView={{ opacity: 1, y: 0, rotate: -3, x: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              className="relative md:ml-auto md:mr-8 md:max-w-sm"
+            >
+              <div
+                className="rounded-lg bg-white p-[6px]"
+                style={{
+                  boxShadow:
+                    "0 30px 60px -10px rgba(0,0,0,0.18), 0 18px 36px -6px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04)",
+                }}
+              >
+                <Image
+                  src={siteContent.about.portrait}
+                  alt="Lisa Hancock"
+                  width={500}
+                  height={625}
+                  className="rounded-md w-full h-auto"
+                  sizes="(max-width: 768px) 80vw, 350px"
+                />
               </div>
-            </FadeIn>
+              <div
+                className="absolute -bottom-4 right-[-20px] bg-white px-4 py-2 rounded-sm"
+                style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
+              >
+                <p className="text-xs tracking-[0.2em] uppercase text-zinc-400">Est. 2006</p>
+                <p className="text-xs text-zinc-300">Brooklyn, NY</p>
+              </div>
+            </motion.div>
 
             {/* Text */}
             <div>
