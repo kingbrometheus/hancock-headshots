@@ -18,19 +18,15 @@ function Card({
   image,
   index,
   total,
-  hoveredIndex,
   collapse,
   ready,
-  onHover,
   onClick,
 }: {
   image: { src: string; alt: string };
   index: number;
   total: number;
-  hoveredIndex: number | null;
   collapse: number;
   ready: boolean;
-  onHover: (i: number | null) => void;
   onClick: () => void;
 }) {
   const controls = useAnimationControls();
@@ -43,8 +39,7 @@ function Card({
   const fanX = offset * 160;
   const fanY = Math.abs(offset) * Math.abs(offset) * 14;
 
-  const isHovered = hoveredIndex === index;
-  const zIndex = isHovered ? 100 : 10 + total - Math.abs(Math.round(offset));
+  const zIndex = 10 + total - Math.abs(Math.round(offset));
 
   // Intro — waits for ready
   useEffect(() => {
@@ -74,7 +69,6 @@ function Card({
   // Collapse on scroll
   useEffect(() => {
     if (!introComplete.current) return;
-    if (hoveredIndex !== null) return;
 
     const c = collapse;
     controls.start({
@@ -86,41 +80,6 @@ function Card({
     });
   }, [collapse]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Hover
-  useEffect(() => {
-    if (!introComplete.current) return;
-
-    const c = collapse;
-    const curX = lerp(fanX, offset * 4, c);
-    const curY = lerp(fanY, 0, c);
-
-    if (isHovered) {
-      controls.start({
-        y: curY - 25,
-        scale: 1.07,
-        transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
-      });
-    } else if (hoveredIndex !== null) {
-      const hoveredOffset = hoveredIndex - mid;
-      const direction = offset < hoveredOffset ? -1 : 1;
-      const proximity = Math.max(0, 3 - Math.abs(index - hoveredIndex));
-      const nudge = direction * proximity * 18 * (1 - c);
-
-      controls.start({
-        x: curX + nudge,
-        y: curY,
-        scale: 1 - proximity * 0.02,
-        transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
-      });
-    } else {
-      controls.start({
-        x: curX,
-        y: curY,
-        scale: 1,
-        transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
-      });
-    }
-  }, [hoveredIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <motion.div
@@ -131,8 +90,6 @@ function Card({
       }}
       initial={{ opacity: 0, y: 0, x: 0, rotateZ: 0, scale: 1 }}
       animate={controls}
-      onMouseEnter={() => onHover(index)}
-      onMouseLeave={() => onHover(null)}
       onClick={onClick}
     >
       <div
@@ -140,10 +97,7 @@ function Card({
         style={{
           width: "clamp(180px, 24vw, 360px)",
           aspectRatio: "3 / 4",
-          boxShadow: isHovered
-            ? "0 30px 60px -10px rgba(0,0,0,0.3), 0 15px 30px -5px rgba(0,0,0,0.18)"
-            : "0 10px 35px -5px rgba(0,0,0,0.15), 0 5px 15px -3px rgba(0,0,0,0.1)",
-          transition: "box-shadow 0.3s ease",
+          boxShadow: "0 10px 35px -5px rgba(0,0,0,0.15), 0 5px 15px -3px rgba(0,0,0,0.1)",
         }}
       >
         <div className="relative w-full h-full rounded-lg overflow-hidden">
@@ -161,7 +115,6 @@ function Card({
 }
 
 export function CardDeck({ images, onSelect, ready = true }: CardDeckProps) {
-  const [hovered, setHovered] = useState<number | null>(null);
   const [collapse, setCollapse] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -189,10 +142,8 @@ export function CardDeck({ images, onSelect, ready = true }: CardDeckProps) {
           image={image}
           index={index}
           total={images.length}
-          hoveredIndex={hovered}
           collapse={collapse}
           ready={ready}
-          onHover={setHovered}
           onClick={() => onSelect(index)}
         />
       ))}

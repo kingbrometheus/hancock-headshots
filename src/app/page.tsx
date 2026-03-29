@@ -19,7 +19,19 @@ function pickRandom<T>(arr: T[], count: number): T[] {
 export default function Home() {
   const { site, galleries } = siteContent;
   const allImages = [...galleries.actors.images, ...galleries.professionals.images];
-  const [featured] = useState(() => pickRandom(allImages, 7));
+  const [featured, setFeatured] = useState<typeof allImages>([]);
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+    const arr = [...allImages];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    setFeatured(arr.slice(0, 7));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [preloaderDone, setPreloaderDone] = useState(false);
@@ -67,9 +79,9 @@ export default function Home() {
         </motion.div>
 
         {/* Card deck — centered in viewport */}
-        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none pt-16">
+        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none pt-8">
           <div className="w-full h-[60vh] pointer-events-auto">
-            <CardDeck images={featured} onSelect={setLightbox} ready={preloaderDone} />
+            {featured.length > 0 && <CardDeck images={featured} onSelect={setLightbox} ready={preloaderDone} />}
           </div>
         </div>
 
@@ -77,7 +89,7 @@ export default function Home() {
         <div className="h-[85vh]" />
 
         {/* Mission statement */}
-        <div className="py-12 md:py-16 text-center px-6">
+        <div className="pt-14 md:pt-20 pb-12 md:pb-16 text-center px-6">
           <FadeIn delay={0.5}>
             <p
               className="text-xl md:text-3xl lg:text-5xl italic font-light max-w-4xl mx-auto leading-snug md:leading-tight"
